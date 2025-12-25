@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Get user mining accounts",
+      "method": "GET",
+      "path": "/?action=accounts",
+      "headers": {
+        "X-Session-Token": "test-session-token"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "accounts": "array"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get dashboard data",
+      "method": "GET",
+      "path": "/?action=dashboard",
+      "headers": {
+        "X-Session-Token": "test-session-token"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "summary": "object"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

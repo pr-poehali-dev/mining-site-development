@@ -1,15 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
+import AuthModal from '@/components/AuthModal';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [hashrate, setHashrate] = useState('100');
   const [power, setPower] = useState('3000');
   const [electricity, setElectricity] = useState('0.05');
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('session_token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleAuthSuccess = () => {
+    setIsLoggedIn(true);
+    setAuthModalOpen(false);
+    navigate('/dashboard');
+  };
+
+  const handleAuthSuccess = () => {
+    setIsLoggedIn(true);
+    setAuthModalOpen(false);
+    navigate('/dashboard');
+  };
 
   const calculateProfit = () => {
     const btcPrice = 42000;
@@ -95,10 +117,17 @@ const Index = () => {
             <a href="#stats" className="text-foreground/80 hover:text-primary transition-colors">Статистика</a>
             <a href="#about" className="text-foreground/80 hover:text-primary transition-colors">О проекте</a>
           </div>
-          <Button className="glow-hover">
-            <Icon name="LogIn" size={18} className="mr-2" />
-            Войти
-          </Button>
+          {isLoggedIn ? (
+            <Button className="glow-hover" onClick={() => navigate('/dashboard')}>
+              <Icon name="LayoutDashboard" size={18} className="mr-2" />
+              Личный кабинет
+            </Button>
+          ) : (
+            <Button className="glow-hover" onClick={() => setAuthModalOpen(true)}>
+              <Icon name="LogIn" size={18} className="mr-2" />
+              Войти
+            </Button>
+          )}
         </div>
       </nav>
 
@@ -422,6 +451,12 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <AuthModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+      />
     </div>
   );
 };

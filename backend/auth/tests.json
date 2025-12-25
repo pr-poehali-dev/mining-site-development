@@ -1,0 +1,40 @@
+{
+  "tests": [
+    {
+      "name": "Register new user",
+      "method": "POST",
+      "path": "/?action=register",
+      "body": {
+        "email": "test@example.com",
+        "password": "SecurePass123!",
+        "full_name": "Test User"
+      },
+      "expectedStatus": 201,
+      "expectedBody": {
+        "message": "User registered successfully",
+        "user": {
+          "email": "string",
+          "full_name": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Login without 2FA",
+      "method": "POST",
+      "path": "/?action=login",
+      "body": {
+        "email": "test@example.com",
+        "password": "SecurePass123!"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "session_token": "string",
+        "user": {
+          "email": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
